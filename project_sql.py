@@ -47,6 +47,9 @@ queries = {
     "3. Shallow earthquakes < 50 km and mag > 7.5":
 """SELECT * FROM earthquake WHERE depth_km < 50  AND mag > 7.5;""",
 
+"4. Average depth per continent":
+"""SELECT 'NOT AVALIABLE' AS NOTE""",
+
     "5. Average magnitude per magnitude type (magType)":
  """SELECT magType , AVG(mag) AS magnitude FROM earthquake GROUP BY magType;""",
 
@@ -88,6 +91,9 @@ WHERE alert IN ('orange', 'red')
 ORDER BY sig DESC
 LIMIT 5;""",
 
+"12.  Total estimated economic loss per continent":
+"""SELECT 'NOT AVALIABLE' AS NOTE""",
+
 "13.Average economic loss by alert level":
 """SELECT
     alert,
@@ -110,15 +116,18 @@ FROM earthquake GROUP BY type;""",
 """SELECT  types , count(*) as total
 FROM earthquake GROUP BY types """,
 
+"17.  Average RMS and gap per continent":
+"""SELECT 'NOT AVALIABLE' AS NOTE""",
+
 "18.  Events with high station coverage (nst > threshold)":
 """SELECT *
 FROM earthquake
 WHERE nst > 50; """,
 
 "19.  Number of tsunamis triggered per year":
-"""SELECT year AS year, COUNT(*) AS tsunamis
-FROM earthquake WHERE tsunamis = 1
-GROUP BY year;""",
+"""SELECT 'year' , COUNT(*) AS tsunamis
+FROM earthquake WHERE tsunami
+GROUP BY 'year';""",
 
 "20.  Count earthquakes by alert levels (red, orange, etc.)":
 """SELECT alert , COUNT(*) AS total
@@ -142,16 +151,14 @@ GROUP BY place, `year`, `month`
 HAVING COUNT(DISTINCT depth_flag) = 2; """,
 
 "23.Compute the year-over-year growth rate in the total number of earthquakes globally":
-"""SELECT
-    `year`,
-    COUNT(*) AS total_events,
-    (LAG(COUNT(*)) OVER (ORDER BY `year`) AS previous_year_events,
-    COUNT(*) - LAG(COUNT(*) OVER (ORDER BY `year`))
-        / LAG(COUNT(*)) OVER (ORDER BY `year`) * 100
-     AS growth_percent
-FROM earthquake
-GROUP BY year
-ORDER BY year;""",
+"""SELECT `year`,
+                  COUNT(*) AS total_events,
+                  LAG(COUNT(*)) OVER (ORDER BY `year`) AS previous_year_events,
+                  ROUND((COUNT(*) - LAG(COUNT(*)) OVER (ORDER BY `year`))
+                        / LAG(COUNT(*)) OVER (ORDER BY `year`) * 100, 2) AS growth_percent
+           FROM earthquake
+           GROUP BY `year`
+           ORDER BY `year`;""",
 
 "24. List the 3 most seismically active regions by combining both frequency and average magnitude":
 """SELECT
@@ -194,6 +201,9 @@ LIMIT 5; """,
 FROM earthquake
 ORDER BY gap DESC, rms DESC
 LIMIT 10;""",
+
+" 29. Find pairs of consecutive earthquakes (by time) that occurred within 50 km of each other and within 1 hour":
+""" SELECT 'NOT AVALIABLE' AS NOTE""",
 
 "30. Determine the regions with the highest frequency of deep-focus earthquakes (depth > 300 km)":
 """SELECT
